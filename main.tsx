@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
-import Header from './sections/Header';
-import JourneySection from './sections/JourneySection';
-import ServicesSection from './sections/ServicesSection';
-import GallerySection from './sections/GallerySection';
-import AboutSection from './sections/AboutSection';
-import ContactSection from './sections/ContactSection';
-import Footer from './sections/Footer';
+import Header from './Header';
+import JourneySection from './JourneySection';
+import ServicesSection from './ServicesSection';
+import GallerySection from './GallerySection';
+import AboutSection from './AboutSection';
+import ContactSection from './ContactSection';
 
 function App() {
   useEffect(() => {
@@ -36,10 +35,6 @@ function App() {
         <ContactSection />
       </main>
 
-      {/* Footer */}
-      <div className="relative" style={{ zIndex: 10 }}>
-        <Footer />
-      </div>
     </div>
   );
 }
