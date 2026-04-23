@@ -1,43 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { useEffect } from 'react';
-import Header from './Header';
-import GallerySection from './GallerySection';
-import AboutSection from './AboutSection';
-import ContactSection from './ContactSection';
 import './index.css';
 
 function App() {
-  useEffect(() => {
-    // Preload critical images
-    const criticalImages = [
-      '/images/monitor.jpg',
-      '/images/drone.png',
-    ];
-    criticalImages.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, []);
-
   return (
-    <div className="relative">
-      {/* Header */}
-      <Header />
-
-      {/* Content sections - scrollable */}
-      <main className="relative" style={{ zIndex: 10 }}>
-        <GallerySection />
-        <AboutSection />
-        <ContactSection />
-      </main>
-
+    <div style={{ backgroundColor: '#0a0f0d', color: '#f7fff7', minHeight: '100vh', padding: '2rem' }}>
+      <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>AIR.SOUND</h1>
+      <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>
+        Veranstaltungstechnik & Event Management
+      </p>
+      <p>Website wird geladen...</p>
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+const root = document.getElementById('root');
+if (root) {
+  ReactDOM.createRoot(root).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
+}
