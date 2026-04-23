@@ -4,44 +4,77 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const stats = [
-  { value: '4K/60fps', label: 'Videoqualit\u00e4t' },
-  { value: '360\u00b0', label: 'Panorama-Aufnahmen' },
-  { value: 'DaVinci', label: 'Professional Editing' },
-  { value: 'Flexibel', label: 'Aufbauservice' },
+const galleryImages = [
+  {
+    src: '/images/event-stage.jpg',
+    alt: 'Event & Konzert',
+    category: 'Veranstaltungen',
+    span: 'col-span-1 row-span-1',
+  },
+  {
+    src: '/images/wedding.jpg',
+    alt: 'Hochzeit',
+    category: 'Hochzeiten',
+    span: 'col-span-1 row-span-2',
+  },
+  {
+    src: '/images/real-estate.jpg',
+    alt: 'Immobilie',
+    category: 'Immobilien',
+    span: 'col-span-1 row-span-1',
+  },
+  {
+    src: '/images/inspection.jpg',
+    alt: 'Gebäudeinspektion',
+    category: 'Inspektion',
+    span: 'col-span-1 row-span-1',
+  },
+  {
+    src: '/images/drone.png',
+    alt: 'Drohne',
+    category: 'Equipment',
+    span: 'col-span-1 row-span-1',
+  },
+  {
+    src: '/images/camera.png',
+    alt: 'Kamera',
+    category: 'Equipment',
+    span: 'col-span-1 row-span-1',
+  },
 ];
 
-const AboutSection = () => {
+const GallerySection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const leftRef = useRef<HTMLDivElement>(null);
-  const rightRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // Left column slides in from left
-      gsap.from(leftRef.current, {
-        x: -40,
+      // Title animation
+      gsap.from(titleRef.current, {
+        y: 40,
         opacity: 0,
-        duration: 1,
+        duration: 0.8,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: section,
-          start: 'top 75%',
+          trigger: titleRef.current,
+          start: 'top 85%',
         },
       });
 
-      // Right column slides in from right
-      gsap.from(rightRef.current, {
-        x: 40,
+      // Gallery items stagger
+      gsap.from(itemsRef.current, {
+        scale: 0.9,
         opacity: 0,
-        duration: 1,
+        duration: 0.8,
+        stagger: 0.1,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: section,
-          start: 'top 75%',
+          trigger: itemsRef.current[0],
+          start: 'top 80%',
         },
       });
     }, section);
@@ -51,88 +84,53 @@ const AboutSection = () => {
 
   return (
     <section
-      id="ueber-uns"
+      id="galerie"
       ref={sectionRef}
-      className="relative bg-[#1A535C] overflow-hidden"
+      className="relative bg-[#F7FFF7] overflow-hidden"
     >
-      {/* Gradient orb */}
-      <div
-        className="gradient-orb w-[400px] h-[400px] bg-[#FF6B35]/10 -bottom-40 -left-40"
-      />
-
       <div className="section-padding content-max relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
-          {/* Left column - Text */}
-          <div ref={leftRef} className="lg:col-span-3">
-            <h2
-              className="font-display text-white mb-6"
-              style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+        {/* Section header */}
+        <div ref={titleRef} className="text-center mb-16">
+          <h2
+            className="font-display text-[#0A0F0D] mb-4"
+            style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+          >
+            UNSERE ARBEIT
+          </h2>
+          <div className="w-16 h-1 bg-[#FF6B35] mx-auto mb-4 rounded-full" />
+          <p className="text-[#0A0F0D]/70 text-lg max-w-xl mx-auto">
+            Ein Auszug aus unseren Projekten — von Events bis hin zu kommerziellen Filmproduktionen.
+          </p>
+        </div>
+
+        {/* Gallery grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px] md:auto-rows-[250px]">
+          {galleryImages.map((image, i) => (
+            <div
+              key={image.src}
+              ref={(el) => {
+                if (el) itemsRef.current[i] = el;
+              }}
+              className={`relative overflow-hidden rounded-xl cursor-pointer group ${image.span}`}
             >
-              \u00dcBER{' '}
-              <span style={{ color: '#4ECDC4' }}>AIR.SOUND</span>
-            </h2>
-            <p className="text-[#F7FFF7]/90 text-lg leading-relaxed mb-6">
-              Wir sind Ihr Partner f\u00fcr professionelle Drohnenaufnahmen, Eventtechnik und
-              Musiktechnik in Mainz und Umgebung. Mit modernster Ausr\u00fcstung und kreativen
-              Ideen heben wir Ihre Projekte auf das n\u00e4chste Level.
-            </p>
-            <p className="text-[#F7FFF7]/80 leading-relaxed">
-              Egal ob Imagefilm, Hochzeitsvideo oder Geb\u00e4udeinspektion \u2014 wir liefern
-              Ergebnisse, die begeistern. Von der ersten Idee bis zur finalen
-              Nachbearbeitung begleiten wir Sie durch den gesamten Prozess.
-            </p>
-
-            {/* Equipment preview */}
-            <div className="flex gap-4 mt-8 flex-wrap">
-              <div className="w-20 h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2 hover:bg-white/10 transition-colors">
-                <img
-                  src="/images/drone.png"
-                  alt="DJI Drohne"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <div className="w-20 h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2 hover:bg-white/10 transition-colors">
-                <img
-                  src="/images/camera.png"
-                  alt="Kamera"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <div className="w-20 h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2 hover:bg-white/10 transition-colors">
-                <img
-                  src="/images/mixer.png"
-                  alt="Mischpult"
-                  className="w-full h-full object-contain"
-                />
+              <img
+                src={image.src}
+                alt={image.alt}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-[#0A0F0D]/0 group-hover:bg-[#0A0F0D]/50 transition-all duration-400 flex items-end p-4">
+                <span className="text-white text-sm font-medium uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
+                  {image.category}
+                </span>
               </div>
             </div>
-          </div>
-
-          {/* Right column - Stats */}
-          <div ref={rightRef} className="lg:col-span-2">
-            <div className="space-y-6">
-              {stats.map((stat) => (
-                <div
-                  key={stat.value}
-                  className="glass-card p-6 flex items-center gap-5"
-                >
-                  <span
-                    className="text-[#FFD166] font-mono"
-                    style={{ fontSize: '2.5rem', fontFamily: "'JetBrains Mono', monospace" }}
-                  >
-                    {stat.value}
-                  </span>
-                  <span className="text-[#F7FFF7] font-medium text-sm tracking-wider uppercase">
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
   );
 };
 
-export default AboutSection;
+export default GallerySection;

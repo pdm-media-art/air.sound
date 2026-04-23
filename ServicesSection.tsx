@@ -1,136 +1,65 @@
-import { useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+const Footer = () => {
+  const navLinks = [
+    { label: 'Leistungen', href: '#leistungen' },
+    { label: 'Galerie', href: '#galerie' },
+    { label: '\u00dcber uns', href: '#ueber-uns' },
+    { label: 'Kontakt', href: '#kontakt' },
+    { label: 'Impressum', href: '#' },
+    { label: 'Datenschutz', href: '#' },
+  ];
 
-gsap.registerPlugin(ScrollTrigger);
-
-const galleryImages = [
-  {
-    src: '/images/event-stage.jpg',
-    alt: 'Event & Konzert',
-    category: 'Veranstaltungen',
-    span: 'col-span-1 row-span-1',
-  },
-  {
-    src: '/images/wedding.jpg',
-    alt: 'Hochzeit',
-    category: 'Hochzeiten',
-    span: 'col-span-1 row-span-2',
-  },
-  {
-    src: '/images/real-estate.jpg',
-    alt: 'Immobilie',
-    category: 'Immobilien',
-    span: 'col-span-1 row-span-1',
-  },
-  {
-    src: '/images/inspection.jpg',
-    alt: 'Gebäudeinspektion',
-    category: 'Inspektion',
-    span: 'col-span-1 row-span-1',
-  },
-  {
-    src: '/images/drone.png',
-    alt: 'Drohne',
-    category: 'Equipment',
-    span: 'col-span-1 row-span-1',
-  },
-  {
-    src: '/images/camera.png',
-    alt: 'Kamera',
-    category: 'Equipment',
-    span: 'col-span-1 row-span-1',
-  },
-];
-
-const GallerySection = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<HTMLDivElement[]>([]);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      // Title animation
-      gsap.from(titleRef.current, {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: 'top 85%',
-        },
-      });
-
-      // Gallery items stagger
-      gsap.from(itemsRef.current, {
-        scale: 0.9,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: itemsRef.current[0],
-          start: 'top 80%',
-        },
-      });
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
+  const scrollTo = (href: string) => {
+    if (href === '#') return;
+    const el = document.querySelector(href);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <section
-      id="galerie"
-      ref={sectionRef}
-      className="relative bg-[#F7FFF7] overflow-hidden"
-    >
-      <div className="section-padding content-max relative z-10">
-        {/* Section header */}
-        <div ref={titleRef} className="text-center mb-16">
-          <h2
-            className="font-display text-[#0A0F0D] mb-4"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+    <footer className="bg-[#0A0F0D] border-t border-white/5">
+      <div className="content-max py-16 px-[clamp(1.5rem,5vw,3rem)]">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="text-[#F7FFF7] font-extrabold text-2xl tracking-[0.1em] hover:text-[#4ECDC4] transition-colors inline-block"
           >
-            UNSERE ARBEIT
-          </h2>
-          <div className="w-16 h-1 bg-[#FF6B35] mx-auto mb-4 rounded-full" />
-          <p className="text-[#0A0F0D]/70 text-lg max-w-xl mx-auto">
-            Ein Auszug aus unseren Projekten — von Events bis hin zu kommerziellen Filmproduktionen.
+            AIR.SOUND
+          </a>
+          <p className="text-[#4ECDC4] text-sm mt-2">
+            Drohnen &amp; Eventtechnik
           </p>
         </div>
 
-        {/* Gallery grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px] md:auto-rows-[250px]">
-          {galleryImages.map((image, i) => (
-            <div
-              key={image.src}
-              ref={(el) => {
-                if (el) itemsRef.current[i] = el;
-              }}
-              className={`relative overflow-hidden rounded-xl cursor-pointer group ${image.span}`}
+        {/* Navigation */}
+        <nav className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-10">
+          {navLinks.map((link) => (
+            <button
+              key={link.label}
+              onClick={() => scrollTo(link.href)}
+              className="text-[#F7FFF7]/70 text-xs font-medium uppercase tracking-[0.05em] hover:text-[#4ECDC4] transition-colors"
             >
-              <img
-                src={image.src}
-                alt={image.alt}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-[#0A0F0D]/0 group-hover:bg-[#0A0F0D]/50 transition-all duration-400 flex items-end p-4">
-                <span className="text-white text-sm font-medium uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
-                  {image.category}
-                </span>
-              </div>
-            </div>
+              {link.label}
+            </button>
           ))}
+        </nav>
+
+        {/* Divider */}
+        <div className="w-full h-px bg-white/10 mb-6" />
+
+        {/* Bottom bar */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-[#F7FFF7]/50">
+          <span>&copy; 2025 Air.Sound</span>
+          <span>Marek Blaschke</span>
         </div>
       </div>
-    </section>
+    </footer>
   );
 };
 
-export default GallerySection;
+export default Footer;

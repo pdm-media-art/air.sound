@@ -1,10 +1,11 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { useEffect } from 'react';
 import Header from './Header';
-import JourneySection from './JourneySection';
-import ServicesSection from './ServicesSection';
 import GallerySection from './GallerySection';
 import AboutSection from './AboutSection';
 import ContactSection from './ContactSection';
+import './index.css';
 
 function App() {
   useEffect(() => {
@@ -24,12 +25,8 @@ function App() {
       {/* Header */}
       <Header />
 
-      {/* Journey experience - fixed canvas */}
-      <JourneySection />
-
       {/* Content sections - scrollable */}
       <main className="relative" style={{ zIndex: 10 }}>
-        <ServicesSection />
         <GallerySection />
         <AboutSection />
         <ContactSection />
@@ -39,4 +36,8 @@ function App() {
   );
 }
 
-export default App;
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
