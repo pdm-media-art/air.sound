@@ -1,166 +1,138 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+import { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-@layer base {
-  :root {
-    --sky-blue: #4ECDC4;
-    --deep-ocean: #1A535C;
-    --warm-amber: #FFD166;
-    --bright-orange: #FF6B35;
-    --soft-cloud: #F7FFF7;
-    --near-black: #0A0F0D;
+gsap.registerPlugin(ScrollTrigger);
 
-    --background: 0 0% 100%;
-    --foreground: 150 20% 4%;
-    --card: 0 0% 100%;
-    --card-foreground: 150 20% 4%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 150 20% 4%;
-    --primary: 174 60% 55%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 174 55% 23%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 150 100% 97%;
-    --muted-foreground: 150 10% 40%;
-    --accent: 40 100% 70%;
-    --accent-foreground: 150 20% 4%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 150 20% 88%;
-    --input: 150 20% 88%;
-    --ring: 174 60% 55%;
-    --radius: 0.625rem;
-  }
+const stats = [
+  { value: '4K/60fps', label: 'Videoqualit\u00e4t' },
+  { value: '360\u00b0', label: 'Panorama-Aufnahmen' },
+  { value: 'DaVinci', label: 'Professional Editing' },
+  { value: 'Flexibel', label: 'Aufbauservice' },
+];
 
-  * {
-    @apply border-border;
-  }
+const AboutSection = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
 
-  html {
-    scroll-behavior: auto;
-  }
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
 
-  body {
-    font-family: 'Inter', sans-serif;
-    @apply bg-[#0A0F0D] text-[#F7FFF7];
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+    const ctx = gsap.context(() => {
+      // Left column slides in from left
+      gsap.from(leftRef.current, {
+        x: -40,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 75%',
+        },
+      });
 
-  h1, h2, h3, h4, h5, h6 {
-    text-wrap: balance;
-    word-break: keep-all;
-  }
-}
+      // Right column slides in from right
+      gsap.from(rightRef.current, {
+        x: 40,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 75%',
+        },
+      });
+    }, section);
 
-@layer components {
-  .glass-card {
-    @apply backdrop-blur-xl bg-white/[0.06] border border-white/[0.15] rounded-2xl;
-  }
+    return () => ctx.revert();
+  }, []);
 
-  .glass-card-hover {
-    @apply transition-all duration-300 ease-out;
-  }
+  return (
+    <section
+      id="ueber-uns"
+      ref={sectionRef}
+      className="relative bg-[#1A535C] overflow-hidden"
+    >
+      {/* Gradient orb */}
+      <div
+        className="gradient-orb w-[400px] h-[400px] bg-[#FF6B35]/10 -bottom-40 -left-40"
+      />
 
-  .glass-card-hover:hover {
-    @apply -translate-y-2 border-white/40;
-    box-shadow: 0 25px 50px -12px rgba(78, 205, 196, 0.1);
-  }
+      <div className="section-padding content-max relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
+          {/* Left column - Text */}
+          <div ref={leftRef} className="lg:col-span-3">
+            <h2
+              className="font-display text-white mb-6"
+              style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+            >
+              \u00dcBER{' '}
+              <span style={{ color: '#4ECDC4' }}>AIR.SOUND</span>
+            </h2>
+            <p className="text-[#F7FFF7]/90 text-lg leading-relaxed mb-6">
+              Wir sind Ihr Partner f\u00fcr professionelle Drohnenaufnahmen, Eventtechnik und
+              Musiktechnik in Mainz und Umgebung. Mit modernster Ausr\u00fcstung und kreativen
+              Ideen heben wir Ihre Projekte auf das n\u00e4chste Level.
+            </p>
+            <p className="text-[#F7FFF7]/80 leading-relaxed">
+              Egal ob Imagefilm, Hochzeitsvideo oder Geb\u00e4udeinspektion \u2014 wir liefern
+              Ergebnisse, die begeistern. Von der ersten Idee bis zur finalen
+              Nachbearbeitung begleiten wir Sie durch den gesamten Prozess.
+            </p>
 
-  .section-padding {
-    @apply py-[clamp(80px,12vh,160px)] px-[clamp(1.5rem,5vw,3rem)];
-  }
+            {/* Equipment preview */}
+            <div className="flex gap-4 mt-8 flex-wrap">
+              <div className="w-20 h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2 hover:bg-white/10 transition-colors">
+                <img
+                  src="/images/drone.png"
+                  alt="DJI Drohne"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="w-20 h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2 hover:bg-white/10 transition-colors">
+                <img
+                  src="/images/camera.png"
+                  alt="Kamera"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="w-20 h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2 hover:bg-white/10 transition-colors">
+                <img
+                  src="/images/mixer.png"
+                  alt="Mischpult"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
+          </div>
 
-  .content-max {
-    @apply max-w-[1200px] mx-auto;
-  }
+          {/* Right column - Stats */}
+          <div ref={rightRef} className="lg:col-span-2">
+            <div className="space-y-6">
+              {stats.map((stat) => (
+                <div
+                  key={stat.value}
+                  className="glass-card p-6 flex items-center gap-5"
+                >
+                  <span
+                    className="text-[#FFD166] font-mono"
+                    style={{ fontSize: '2.5rem', fontFamily: "'JetBrains Mono', monospace" }}
+                  >
+                    {stat.value}
+                  </span>
+                  <span className="text-[#F7FFF7] font-medium text-sm tracking-wider uppercase">
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-  .text-gradient-sky {
-    background: linear-gradient(135deg, #4ECDC4, #1A535C);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-gradient-amber {
-    background: linear-gradient(135deg, #FFD166, #FF6B35);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .gradient-orb {
-    @apply absolute rounded-full pointer-events-none;
-    filter: blur(120px);
-  }
-}
-
-@layer utilities {
-  .font-display {
-    font-family: 'Inter', sans-serif;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 0.95;
-  }
-
-  .font-mono-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    font-size: 0.75rem;
-    line-height: 1.4;
-    text-transform: uppercase;
-  }
-}
-
-/* Scroll indicator animation */
-@keyframes scrollPulse {
-  0%, 100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(8px);
-    opacity: 0.5;
-  }
-}
-
-.scroll-dot {
-  animation: scrollPulse 1.5s ease-in-out infinite;
-}
-
-/* Section entrance animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Smooth scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0A0F0D;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1A535C;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #4ECDC4;
-}
+export default AboutSection;
