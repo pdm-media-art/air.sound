@@ -1,13 +1,430 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIR.SOUND - Veranstaltungstechnik & Event Management</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/main.tsx"></script>
-  </body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4ECDC4;
+            --secondary: #FF6B35;
+            --dark: #0A0F0D;
+            --light: #F7FFF7;
+            --accent: #FFD166;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 15, 13, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: #FF8555;
+            transform: scale(1.03);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 70px;
+        }
+
+        section {
+            padding: 4rem 2rem;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        section:nth-child(even) {
+            background-color: rgba(78, 205, 196, 0.05);
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .gallery-item-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        /* Services */
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(255, 107, 53, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .service-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, #1A535C 0%, var(--primary) 100%);
+            text-align: center;
+        }
+
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--light);
+        }
+
+        .contact-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card strong {
+            display: block;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(10, 15, 13, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            nav a {
+                display: block;
+                padding: 0.5rem 0;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">AIR.SOUND</a>
+            <nav>
+                <a href="#services">Leistungen</a>
+                <a href="#gallery">Galerie</a>
+                <a href="#about">Über uns</a>
+                <a href="#contact">Kontakt</a>
+                <button class="cta-button" onclick="document.getElementById('contact').scrollIntoView()">Anfragen</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Services Section -->
+        <section id="services">
+            <h2>Unsere Leistungen</h2>
+            <div class="services">
+                <div class="service-card">
+                    <div class="service-icon">🎤</div>
+                    <h3>Veranstaltungstechnik</h3>
+                    <p>Professionelle Sound-, Licht- und Videotechnik für Konzerte, Festivals und Events</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💍</div>
+                    <h3>Hochzeiten & Feiern</h3>
+                    <p>Perfekte Ton- und Lichtgestaltung für Ihren besonderen Tag</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎬</div>
+                    <h3>Videoproduktion</h3>
+                    <p>Professionelle Video- und Streaming-Services für Live-Events</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎵</div>
+                    <h3>DJ & Musik</h3>
+                    <p>Hochwertige DJing und Live-Musik für jede Veranstaltung</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery">
+            <h2>Galerie</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <div class="gallery-item-image">🎤</div>
+                    <h3>Konzerte</h3>
+                    <p>Event & Konzert-Technik</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-item-image">💍</div>
+                    <h3>Hochzeiten</h3>
+                    <p>Hochzeits-Events</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-item-image">🎬</div>
+                    <h3>Festivals</h3>
+                    <p>Festival-Veranstaltungen</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-item-image">⚡</div>
+                    <h3>Live-Streaming</h3>
+                    <p>Professionelle Stream-Technik</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-item-image">🎵</div>
+                    <h3>DJ-Events</h3>
+                    <p>DJ-Service & Unterhaltung</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-item-image">🎧</div>
+                    <h3>Studio-Recording</h3>
+                    <p>Professionelle Studio-Aufnahmen</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <h2>Über uns</h2>
+            <p style="max-width: 800px; margin-left: auto; margin-right: auto;">
+                AIR.SOUND ist Ihr zuverlässiger Partner für professionelle Veranstaltungstechnik in der Region Mainz. 
+                Mit über 15 Jahren Erfahrung in der Branche bieten wir hochwertige Lösungen für Konzerte, Hochzeiten, 
+                Festivals und Corporate Events. Unser Team setzt auf modernste Technologie und persönlichen Service.
+            </p>
+            <p style="max-width: 800px; margin-left: auto; margin-right: auto;">
+                Ob Soundsystem, Lichttechnik, Videoproduktion oder Live-Streaming – wir kümmern uns um alle technischen Aspekte 
+                Ihrer Veranstaltung, damit Sie sich auf das Wesentliche konzentrieren können.
+            </p>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <h2>Kontaktieren Sie uns</h2>
+            <p style="max-width: 800px; margin-left: auto; margin-right: auto; margin-bottom: 2rem;">
+                Vereinbaren Sie ein unverbindliches Beratungsgespräch
+            </p>
+            <div class="contact-cards">
+                <a href="mailto:air.sound.information@gmail.com" class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <strong>E-Mail</strong>
+                    <span>air.sound.information@gmail.com</span>
+                </a>
+                <a href="tel:+491783549419" class="contact-card">
+                    <div class="contact-icon">📱</div>
+                    <strong>Telefon</strong>
+                    <span>0178 3549419</span>
+                </a>
+                <a href="https://maps.google.com/?q=Wöhlerstraße+2+55120+Mainz" target="_blank" class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <strong>Adresse</strong>
+                    <span>Wöhlerstraße 2, 55120 Mainz</span>
+                </a>
+            </div>
+            <div style="margin-top: 3rem;">
+                <a href="mailto:air.sound.information@gmail.com?subject=Anfrage%20-%20Air.Sound" class="cta-button">
+                    JETZT ANFRAGEN
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#services">Leistungen</a>
+            <a href="#gallery">Galerie</a>
+            <a href="#about">Über uns</a>
+            <a href="#contact">Kontakt</a>
+            <a href="https://www.instagram.com/air.sound.de/" target="_blank">Instagram</a>
+        </div>
+        <p>&copy; 2024 AIR.SOUND - Veranstaltungstechnik & Event Management. Alle Rechte vorbehalten.</p>
+    </footer>
+</body>
 </html>
